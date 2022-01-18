@@ -15,9 +15,9 @@ This repo was tested with python 3.7.7.
 These commands will download data and a pretrained model before running inference.
 ```
 $ cd src/
-$ python3 -m venv venv
+$ /usr/bin/virtualenv --python=/usr/bin/python3.7 venv
 $ source venv/bin/activate
-$ pip install -r requirements.txt
+$ pip install -r ../requirements.txt
 $ python
 >> import nltk; nltk.download("punkt")
 $ sh download_data_ckpt_and_run_inference.sh
