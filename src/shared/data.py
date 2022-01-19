@@ -263,7 +263,8 @@ def get_dataloader(data_path, tok2id, batch_size,
             add_del_tok=add_del_tok,
             categories_path=categories_path)
 
-        pickle.dump(examples, open(pickle_path, 'wb'))
+        if pickle_path is not None:
+            pickle.dump(examples, open(pickle_path, 'wb'))
 
     data = TensorDataset(
         torch.tensor(examples['pre_ids'], dtype=torch.long),
