@@ -102,6 +102,12 @@ def noise_seq(seq, drop_prob=0.25, shuf_dist=3, drop_set=None, keep_bigrams=Fals
 def get_examples(data_path, tok2id, max_seq_len,
                  noise=False, add_del_tok=False,
                  categories_path=None):
+    return get_examples_from_enumerable(enumerate(tqdm(open(data_path))), tok2id, max_seq_len, noise, add_del_tok, categories_path)
+
+
+def get_examples_from_enumerable(enumerable, tok2id, max_seq_len,
+                 noise=False, add_del_tok=False,
+                 categories_path=None):
     global REL2ID
     global POS2ID
     global EDIT_TYPE2ID
@@ -124,7 +130,7 @@ def get_examples(data_path, tok2id, max_seq_len,
             l.strip().split(',')[0]: [float(x) for x in l.strip().split(',')[1:]]
             for l in category_fp
         }
-    for i, (line) in enumerate(tqdm(open(data_path))):
+    for i, (line) in enumerable:
         parts = line.strip().split('\t')
 
         # if there pos/rel info
@@ -290,3 +296,8 @@ def get_dataloader(data_path, tok2id, batch_size,
     dataloader = get_dataloader_from_examples(examples, batch_size, test)
     return dataloader, len(examples['pre_ids'])
 
+
+def get_dataloader_from_str(inp, tok2id, batch_size, test=False):
+    examples = get_examples_from_enumerable(enumerate([inp]), tok2id, max_seq_len=ARGS.max_seq_len)
+    dataloader = get_dataloader_from_examples(examples, batch_size, test)
+    return dataloader, len(examples['pre_ids'])
